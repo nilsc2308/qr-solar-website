@@ -20,9 +20,9 @@ Vorschau: https://nilsc2308.github.io/qr-solar-website/ · Lokal: `python3 -m ht
 - [x] Google Fonts extern entfernt (alte Seite hatte sie)
 
 ## Technik
-- [x] 18 Seiten, statisch, Generator `_build.py`, CSS/JS mit Version `?v=20260917-1`
+- [x] 18 Seiten, statisch, Generator `_build.py`, CSS/JS mit Version `?v=20260917-3`
 - [x] Playwright Chromium + WebKit, 1400 px und 390 px, alle Seiten durchgescrollt: **0 JS-Fehler, kein horizontales Scrollen** (Stand 17.9. abends, nach Umbau auf Kopfzeile oben, Rollo-Blende und zwei neuen Sektionen)
-- [x] Ladegröße bis „load“: **Desktop 396 KB, Handy 221 KB** (nach Umbau erneut gemessen, siehe Chat) (Ziel < 900 / < 500). Szenenfotos 2–5 werden erst nach „load“ nachgeladen.
+- [x] Ladegröße bis „load“: **Desktop 472 KB, Handy 220 KB** (nach dem Umbau gemessen) (Ziel < 900 / < 500). Szenenfotos 2–5 werden erst nach „load“ nachgeladen.
 - [x] Formular: Netlify-Forms-fertig (`data-netlify`, Honeypot `firma`), Pflichtfelder + E-Mail-Prüfung getestet, `?thema=` und `?notiz=` vorbelegen getestet, Weiterleitung auf danke.html
 - [x] Interaktive Elemente getestet: Filter-Galerie (Flachdach → 1 Treffer), Assistent (3 Klicks → Einschätzung), FAQ (nur eins offen), Chat-Anfrage, Paket-Wähler, Vergleichs-Slider (Maus/Touch/Tastatur)
 - [x] Link-Check: keine kaputten internen Links; extern jsDelivr, gesetze-im-internet, ec.europa.eu = 200

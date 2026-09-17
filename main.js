@@ -208,7 +208,7 @@
       list.innerHTML = d.items.map(x => `<li>${x}</li>`).join('');
       const po = { v: parseFloat(price.textContent.replace(/\./g, '')) || 0 };
       gsap.to(po, { v: d.price, duration: .6, ease: 'power2.out', onUpdate: () => price.textContent = fmt(Math.round(po.v)) + ' €' });
-      fill.style.setProperty('--w', (d.kwp / 6.16 * 100) + '%');
+      fill.style.setProperty('--w', (d.kwp / 6.16).toFixed(3));
       gsap.fromTo($$('li', list), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .4, stagger: .05, ease: 'power2.out' });
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => show(i)));
@@ -315,7 +315,7 @@
   const wiz = $('.wiz');
   if (wiz) {
     const qs = $$('.q', wiz), bar = $('.bar i', wiz), sum = $('.sum', wiz); const a = {}; let i = 0;
-    const show = () => { qs.forEach((q, j) => q.classList.toggle('on', j === i)); sum.classList.toggle('on', i >= qs.length); bar.style.setProperty('--w', (Math.min(i, qs.length) / qs.length * 100) + '%'); if (i >= qs.length) result(); };
+    const show = () => { qs.forEach((q, j) => q.classList.toggle('on', j === i)); sum.classList.toggle('on', i >= qs.length); bar.style.setProperty('--w', (Math.min(i, qs.length) / qs.length).toFixed(3)); if (i >= qs.length) result(); };
     const result = () => {
       const v = $('.verdict', sum), dl = $('dl', sum);
       dl.innerHTML = Object.entries(a).map(([k, x]) => `<dt>${k}</dt><dd>${x}</dd>`).join('');

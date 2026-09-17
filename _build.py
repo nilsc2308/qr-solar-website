@@ -4,7 +4,7 @@ import json, os, datetime
 OUT = os.path.dirname(os.path.abspath(__file__)) + '/'
 DOMAIN = 'https://www.qr-solar.de'
 TODAY = '2026-09-17'
-VER = '20260917-1'
+VER = "20260917-2"
 CO = dict(name='Quality Resources Global GmbH', brand='QR Solar', street='Robert-Koch-Straße 1', zip='52134', city='Herzogenrath', tel='02407 5548800', telh='+4924075548800', mail='kontakt@qr-solar.de', lat='50.8641', lon='6.0932')
 
 MARK = '''<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="37" cy="11" r="7" fill="#eda944"/><g fill="#47a955"><path d="M8 20h10l-2 8H6z"/><path d="M20 20h10l-2 8h-10z"/><path d="M32 20h10l-2 8H30z"/><path d="M5 31h10l-2 8H3z"/><path d="M17 31h10l-2 8H15z"/><path d="M29 31h10l-2 8H27z"/></g></svg>'''

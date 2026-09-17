@@ -225,7 +225,7 @@ html.no-motion .planner .roof .opt{opacity:1;transform:none}
 .packs .card .price b{font-size:clamp(28px,3vw,40px);font-weight:800;letter-spacing:-.02em}
 .packs .card .price span{color:var(--ink-3);font-size:14px}
 .packs .card .note{font-size:13px;color:var(--ink-3);margin-top:12px}
-.packs .card .fill{position:absolute;left:0;bottom:0;height:6px;background:var(--sun);width:var(--w,40%);transition:width .8s var(--ease)}
+.packs .card .fill{position:absolute;left:0;bottom:0;height:6px;width:100%;background:var(--sun);transform:scaleX(var(--w,.4));transform-origin:left;transition:transform .8s var(--ease)}
 
 /* ---------- Sommer/Winter ---------- */
 .season{position:relative;height:220vh}
@@ -354,7 +354,7 @@ html.no-motion .facts div{opacity:1}
 /* Schritt-für-Schritt-Assistent */
 .wiz{background:var(--paper);border-radius:var(--r-l);box-shadow:var(--shadow);padding:clamp(22px,3vw,40px);display:grid;gap:22px}
 .wiz .bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
-.wiz .bar i{display:block;height:100%;background:var(--leaf);width:var(--w,0);transition:width .5s var(--ease)}
+.wiz .bar i{display:block;height:100%;width:100%;background:var(--leaf);transform:scaleX(var(--w,0));transform-origin:left;transition:transform .5s var(--ease)}
 .wiz .q{display:none}
 .wiz .q.on{display:grid;gap:16px}
 .wiz .q h3{font-size:clamp(22px,2.4vw,30px)}
@@ -365,8 +365,8 @@ html.no-motion .facts div{opacity:1}
 .wiz .choices button:active{transform:scale(.97)}
 .wiz .sum{display:none;gap:16px}
 .wiz .sum.on{display:grid}
-.wiz .sum .verdict{padding:18px 20px;border-radius:var(--r);background:var(--leaf-soft);border-left:4px solid var(--leaf)}
-.wiz .sum .verdict.warn{background:var(--sun-soft);border-color:var(--sun)}
+.wiz .sum .verdict{padding:18px 20px;border-radius:var(--r);background:var(--leaf-soft);font-weight:500}
+.wiz .sum .verdict.warn{background:var(--sun-soft)}
 .wiz .sum dl{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;margin:0;font-size:15px}
 .wiz .sum dt{color:var(--ink-3)}
 .wiz .sum dd{margin:0;font-weight:700}

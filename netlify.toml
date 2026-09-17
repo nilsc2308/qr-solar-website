@@ -1,0 +1,46 @@
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-src https://www.openstreetmap.org; form-action 'self'; base-uri 'self'"
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Alte Adressen der bisherigen Website
+[[redirects]]
+  from = "/Angebote.html"
+  to = "/angebote.html"
+  status = 301
+[[redirects]]
+  from = "/Referenzen.html"
+  to = "/referenzen.html"
+  status = 301
+[[redirects]]
+  from = "/Wissenswertes.html"
+  to = "/ratgeber.html"
+  status = 301
+[[redirects]]
+  from = "/Jobs.html"
+  to = "/jobs.html"
+  status = 301
+[[redirects]]
+  from = "/Impressum.html"
+  to = "/impressum.html"
+  status = 301
+[[redirects]]
+  from = "/Datenschutz.html"
+  to = "/datenschutz.html"
+  status = 301
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

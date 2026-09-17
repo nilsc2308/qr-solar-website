@@ -4,7 +4,7 @@ import json, os, datetime
 OUT = os.path.dirname(os.path.abspath(__file__)) + '/'
 DOMAIN = 'https://www.qr-solar.de'
 TODAY = '2026-09-17'
-VER = "20260917-2"
+VER = "20260917-3"
 CO = dict(name='Quality Resources Global GmbH', brand='QR Solar', street='Robert-Koch-Straße 1', zip='52134', city='Herzogenrath', tel='02407 5548800', telh='+4924075548800', mail='kontakt@qr-solar.de', lat='50.8641', lon='6.0932')
 
 MARK = '''<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="37" cy="11" r="7" fill="#eda944"/><g fill="#47a955"><path d="M8 20h10l-2 8H6z"/><path d="M20 20h10l-2 8h-10z"/><path d="M32 20h10l-2 8H30z"/><path d="M5 31h10l-2 8H3z"/><path d="M17 31h10l-2 8H15z"/><path d="M29 31h10l-2 8H27z"/></g></svg>'''
@@ -70,15 +70,10 @@ def head(p):
 <div class="curtain intro" aria-hidden="true">{LOGO_W}</div>
 <div class="curtain leave" aria-hidden="true"></div>
 <div class="progress" id="progress" aria-hidden="true"></div>
-<nav class="rail" aria-label="Hauptnavigation">
-  <a class="mark" href="index.html" aria-label="QR Solar – Startseite">{MARK}</a>
-  <span class="vtext" aria-hidden="true">QR Solar · Herzogenrath</span>
-  <button class="menu-btn" aria-expanded="false" aria-controls="drawer"><span class="lines"><span></span><span></span></span><span class="lbl">Menü</span></button>
-  <a class="tel" href="tel:{CO['telh']}" aria-label="Anrufen: {CO['tel']}">{TEL}</a>
-</nav>
-<header class="head">
+<header class="head" id="head">
   <a class="logo" href="index.html" aria-label="QR Solar – Startseite">{LOGO}</a>
-  <div class="right"><a class="tel" href="tel:{CO['telh']}" aria-label="Anrufen: {CO['tel']}">{TEL}</a>
+  <nav aria-label="Hauptnavigation"><ul class="links">{''.join(f'<li><a href="{f}"{" class=active" if p["file"]==f or p.get("parent")==f else ""}>{t}</a></li>' for f,t in NAV[1:-1])}</ul></nav>
+  <div class="right"><a class="tel" href="tel:{CO['telh']}" aria-label="Anrufen: {CO['tel']}">{TEL}<span>{CO['tel']}</span></a><a class="btn sun" href="kontakt.html">Beratung</a>
   <button class="menu-btn" aria-expanded="false" aria-controls="drawer"><span class="lbl">Menü</span><span class="lines"><span></span><span></span></span></button></div>
 </header>
 <div class="scrim" aria-hidden="true"></div>
@@ -185,7 +180,7 @@ def home():
   <div class="stage">
     <div class="layer l1">{img('stadt-abend', 'Luftaufnahme einer Stadt in der Region am Abend', 1800, 1200, lazy=False, sizes='100vw')}
       <div class="cap"><h1>Der Strom, den Sie brauchen, entsteht über Ihrem Kopf.</h1><p>Photovoltaik, Speicher und Warmwasser mit Sonnenstrom – geplant und gebaut in Herzogenrath, für die Städteregion Aachen, den Kreis Heinsberg und den Rhein-Erft-Kreis.</p></div></div>
-    <div class="layer l2" data-img="img/modul-nah.webp" data-img-m="img/modul-nah-m.webp"><div class="diamonds" aria-hidden="true"></div>
+    <div class="layer l2"><img data-src="img/modul-nah.webp" data-srcset="img/modul-nah-m.webp 700w, img/modul-nah.webp 1600w" sizes="100vw" width="1600" height="1067" alt="Nahaufnahme eines Solarmoduls" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
       <div class="cap"><h2>Doppelglas, bifazial, schwarzer Rahmen.</h2><p>Wir verbauen Module, die auch von der Rückseite Licht sammeln und 30 Jahre auf dem Dach bleiben dürfen.</p></div></div>
     <div class="layer l3" data-img="img/ref-aachen.webp" data-img-m="img/ref-aachen-m.webp"><div class="halves" aria-hidden="true"></div>
       <div class="page" aria-hidden="true">{img('ref-aachen', '', 1800, 1013, sizes='100vw')}</div>
@@ -201,12 +196,12 @@ def home():
 
 <section class="cloud dark round" aria-label="Unser Anspruch"><div class="wrap"><p class="sentence">Wo andere nein sagen, haben wir oft eine gute Lösung für unsere Kunden.</p><p class="src">Frank Schreiber &amp; Robert Tandetzki, Gründer von QR Solar</p></div></section>
 
-<section class="sec" id="leistungen"><div class="wrap">
+<section class="sec ways" id="leistungen"><div class="wrap">
   <div class="sec-head"><span class="kicker">Was wir für Sie bauen</span><h2 class="split">Drei Wege, die Sonne im Haus zu behalten.</h2></div>
-  <div class="steps reveal">
-    <div><b><a class="link" href="photovoltaik.html">Photovoltaik {ARROW}</a></b><p>Planung und Bau von PV-Anlagen auf Schrägdach, Flachdach und Fassade. Mit Leistungsoptimierern, wo Kamine, Gauben oder Bäume Schatten werfen. Hausanschluss auf Mindeststandard inklusive.</p></div>
-    <div><b><a class="link" href="speicher-laden.html">Speicher &amp; zeitversetztes Laden {ARROW}</a></b><p>Batteriespeicher von Alpha ESS und GTSystem, auf Wunsch mit Notstrom. Unsere Lösung für alle, die tagsüber mit dem E-Auto unterwegs sind: Der Speicher lädt abends das Auto.</p></div>
-    <div><b><a class="link" href="warmwasser.html">Warmwasser mit PV {ARROW}</a></b><p>Heizstab statt Einspeisung: Sonnenstrom wird zu warmem Wasser – auch als autarkes System ohne Anmeldung beim Netzbetreiber, in vielen Häusern nachrüstbar.</p></div>
+  <div class="rows">
+    <a class="row" href="photovoltaik.html"><div class="t"><h3>Photovoltaik</h3></div><p>Planung und Bau auf Schrägdach, Flachdach und Fassade. Mit Leistungsoptimierern, wo Kamine, Gauben oder Bäume Schatten werfen. Hausanschluss auf Mindeststandard inklusive.</p><div class="pic">{img('ref-rheinkreis', 'Schrägdachanlage mit Belegung auf den Gauben', 1800, 646, sizes='(max-width: 1020px) 100vw, 30vw')}</div><span class="go">{ARROW}</span></a>
+    <a class="row" href="speicher-laden.html"><div class="t"><h3>Speicher &amp; zeitversetztes Laden</h3></div><p>Batteriespeicher von Alpha ESS und GTSystem, auf Wunsch mit Notstrom. Für alle, die tagsüber mit dem E-Auto unterwegs sind: Der Speicher lädt abends das Auto.</p><div class="pic">{img('laden', 'Ladekabel wird in ein Elektroauto gesteckt', 1800, 1198, sizes='(max-width: 1020px) 100vw, 30vw')}</div><span class="go">{ARROW}</span></a>
+    <a class="row" href="warmwasser.html"><div class="t"><h3>Warmwasser mit PV</h3></div><p>Heizstab statt Einspeisung: Sonnenstrom wird zu warmem Wasser – auch als autarkes System ohne Anmeldung beim Netzbetreiber, in vielen Häusern nachrüstbar.</p><div class="pic">{img('sonne-wolken', 'Sonnenstrahlen durch Wolken', 1800, 1200, sizes='(max-width: 1020px) 100vw, 30vw')}</div><span class="go">{ARROW}</span></a>
   </div>
 </div></section>
 
@@ -256,6 +251,14 @@ def home():
     <div class="facts"><div><b>4,75 Mio.</b><span>installierte Solaranlagen in Deutschland</span></div><div><b>72,2 Mrd. kWh</b><span>produzierter Solarstrom im Jahr 2024</span></div><div><b>14,5 %</b><span>Anteil an der Stromerzeugung</span></div></div>
     <p class="small muted" style="margin-top:16px">Zahlen laut qr-solar.de (Quelle siehe Launch-Checkliste). Solarstrom ist schadstofffrei und verursacht nach der Installation keine Treibhausgase.</p></div>
 </div></div></section>
+
+<section class="peek" aria-label="Handwerk aus Herzogenrath">
+  <div class="pin">
+    <div class="back">{img('monteur-dach', 'Monteur bei der Arbeit an einem Solarmodul auf dem Dach', 1800, 1200, sizes='100vw')}</div>
+    <div class="mask"></div>
+    <div class="txt"><span class="kicker">Eigenes Montageteam</span><h2>Wir bauen selbst – und stehen danach noch dafür gerade.</h2><p class="lead">Keine Subunternehmer, kein Callcenter. Wer die Anlage plant, ist auch auf dem Dach – und später am Telefon.</p><div class="actions"><a class="btn white" href="ueber-uns.html">Das Team {ARROW}</a></div></div>
+  </div>
+</section>
 
 <section class="sec grey" id="anfrage"><div class="wrap"><div class="chat">
   <div class="side"><span class="kicker">In drei Fragen zum Gespräch</span><h2 class="split">Erzählen Sie uns kurz von Ihrem Dach.</h2><p class="lead">Drei Antworten reichen, damit wir wissen, worüber wir sprechen. Den Rest klären wir am Telefon oder vor Ort.</p>

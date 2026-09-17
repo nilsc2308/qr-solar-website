@@ -39,6 +39,12 @@
     lenis && lenis.stop(); setTimeout(() => $('a', drawer).focus(), 450);
   };
   btns.forEach(b => b.addEventListener('click', () => drawer.classList.contains('open') ? closeMenu() : openMenu()));
+  // Kopfzeile: über dem Hero transparent, danach weiß; beim Runterscrollen ausblenden, beim Hochscrollen zeigen
+  const head = $('#head'); const hasHero = !!$('.scene');
+  if (hasHero) document.body.classList.add('over-hero');
+  let lastY = 0;
+  const headCheck = () => { const y = scrollY; head.classList.toggle('solid', !hasHero || y > 40); head.classList.toggle('hide', y > lastY + 6 && y > 400 && !document.body.classList.contains('menu-open')); if (Math.abs(y - lastY) > 6) lastY = y; };
+  addEventListener('scroll', headCheck, { passive: true }); headCheck();
   scrim && scrim.addEventListener('click', closeMenu);
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && drawer.classList.contains('open')) { closeMenu(); btns[0].focus(); }
@@ -113,14 +119,13 @@
   const scene = $('.scene');
   if (scene) {
     const L = i => $('.l' + i, scene); const sm = innerWidth <= 820;
-    const dCols = sm ? 5 : 8, dRows = sm ? 6 : 5, pCols = sm ? 8 : 16, pRows = 10;
-    $('.diamonds', L(2)).innerHTML = Array.from({ length: dCols * dRows }, (_, i) => `<i style="background-position:${(i % dCols) / (dCols - 1) * 100}% ${Math.floor(i / dCols) / (dRows - 1) * 100}%"></i>`).join('');
+    const pCols = sm ? 8 : 16, pRows = 10;
     $('.halves', L(3)).innerHTML = '<i></i><i></i>';
     $('.pixels', L(5)).innerHTML = Array.from({ length: pCols * pRows }, (_, i) => `<i style="background-position:${(i % pCols) / (pCols - 1) * 100}% ${Math.floor(i / pCols) / (pRows - 1) * 100}%"></i>`).join('');
     // Fotos 2–5 erst nach „load“ nachziehen
     let lateDone = false; const late = () => { if (lateDone) return; lateDone = true;
       $$('img[data-src]', scene).forEach(im => { im.srcset = im.dataset.srcset; im.src = im.dataset.src; });
-      [[2, '.diamonds i'], [3, '.halves i'], [5, '.pixels i']].forEach(([n, sel]) => { const l = L(n); $$(sel, l).forEach(i => i.style.backgroundImage = `url(${sm ? l.dataset.imgM : l.dataset.img})`); }); };
+      [[3, '.halves i'], [5, '.pixels i']].forEach(([n, sel]) => { const l = L(n); $$(sel, l).forEach(i => i.style.backgroundImage = `url(${sm ? l.dataset.imgM : l.dataset.img})`); }); };
     if (document.readyState === 'complete') setTimeout(late, 250); else addEventListener('load', () => setTimeout(late, 250));
     addEventListener('scroll', late, { once: true, passive: true });
     $$('.cap', scene).forEach(wrapWords);
@@ -132,8 +137,10 @@
       // 1: Städteregion am Abend – ruhiger Zoom
       tl.fromTo($('img', L(1)), { scale: 1.05 }, { scale: 1.16, duration: 1.1, ease: 'none' }, 0);
       capOut($('.cap', L(1)), .72);
-      // 2: Rautenraster – Modul-Rauten wachsen von der Mitte nach außen
-      tl.to($$('.diamonds i', L(2)), { scale: 1.02, duration: .45, stagger: { each: .012, grid: [dRows, dCols], from: 'center' }, ease: 'power2.out' }, .9);
+      // 2: Rollo – Foto 2 schiebt sich von unten herauf, Foto 1 weicht nach oben
+      tl.to(L(2), { yPercent: -100, duration: .55, ease: 'power3.inOut' }, .9)
+        .to($('img', L(1)), { yPercent: -22, duration: .55, ease: 'power3.inOut' }, .9)
+        .fromTo($('img', L(2)), { scale: 1.15 }, { scale: 1.02, duration: .9, ease: 'power2.out' }, .9);
       capIn($('.cap', L(2)), 1.35); capOut($('.cap', L(2)), 1.85);
       // 3: Spiegel-Split – obere und untere Hälfte fahren aus der Mitte auseinander
       tl.to($$('.halves i', L(3)), { scaleY: 1, duration: .55, ease: 'power3.inOut' }, 2.0)
@@ -164,6 +171,18 @@
       ws.forEach(w => gsap.set(w, { x: R() * innerWidth * .8, y: R() * innerHeight * .7, rotate: R() * 60, opacity: 0, scale: .6 + Math.random() * .8 }));
       gsap.to(ws, { x: 0, y: 0, rotate: 0, opacity: 1, scale: 1, ease: 'power3.out', stagger: { each: .04, from: 'random' }, scrollTrigger: { trigger: cloud, start: 'top 75%', end: 'center 45%', scrub: .8 } });
     }
+  }
+
+  // ---------- Drei Wege: Fotos decken sich beim Scrollen auf ----------
+  if (!reduce) $$('.ways .row').forEach(r => gsap.to($('.pic', r), { clipPath: 'inset(0 0% 0 0 round 16px)', ease: 'none', scrollTrigger: { trigger: r, start: 'top 85%', end: 'top 45%', scrub: .6 } }));
+
+  // ---------- Ausschnitt-Parallax: Kreis gibt das Foto frei ----------
+  const peek = $('.peek');
+  if (peek && !reduce) {
+    const tl = gsap.timeline({ scrollTrigger: { trigger: peek, start: 'top top', end: 'bottom bottom', scrub: .7 } });
+    tl.fromTo($('.mask', peek), { clipPath: 'circle(8% at 50% 50%)' }, { clipPath: 'circle(85% at 50% 50%)', duration: .7, ease: 'power2.inOut' }, 0)
+      .fromTo($('.back', peek), { yPercent: -6, scale: 1.1 }, { yPercent: 4, scale: 1, duration: 1, ease: 'none' }, 0)
+      .fromTo($('.txt', peek), { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .3 }, .45);
   }
 
   // ---------- Signature: Belegungsplaner ----------
@@ -210,6 +229,7 @@
       gsap.to(po, { v: d.price, duration: .6, ease: 'power2.out', onUpdate: () => price.textContent = fmt(Math.round(po.v)) + ' €' });
       fill.style.setProperty('--w', (d.kwp / 6.16).toFixed(3));
       gsap.fromTo($$('li', list), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .4, stagger: .05, ease: 'power2.out' });
+      if (!reduce) gsap.fromTo(card, { rotateY: -10, opacity: .5 }, { rotateY: 0, opacity: 1, duration: .6, ease: 'power3.out', transformPerspective: 1200, overwrite: 'auto' });
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => show(i)));
     show(0);
